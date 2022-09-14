@@ -4,7 +4,8 @@ export type TabInfo = {
   icon: string | undefined,
   status: string | undefined,
   url: string | undefined,
-  pendingUrl: string | undefined
+  pendingUrl: string | undefined,
+  active: boolean | undefined,
 }
 
 export type WindowState = {

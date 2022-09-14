@@ -131,7 +131,8 @@ const sendMessage = async (id: string, message: Message) => {
 exports.api = functions.https.onRequest(app);
 
 app.post("/uploadTabImages/:id", async (req, res) => {
-
   const tabImages = req.body.tabImages;
   db.collection("tabImages").doc(req.params.id).set(tabImages);
+
+  res.sendStatus(200);
 });
