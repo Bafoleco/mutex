@@ -16,11 +16,10 @@
     "name": "Bay Foley-Cox",
     "email": "bayfoleycox@gmail.com"
   },
-  "repository": { 
-    "type": "git", 
-    "url": "https://github.com/bnb/metaverse.git" 
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bafoleco/mutex"
   },
-  "license": "MIT",
   "config": {
     "forge": "./config/forge.config.js"
   },
