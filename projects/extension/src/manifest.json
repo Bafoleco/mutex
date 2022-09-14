@@ -1,0 +1,27 @@
+{
+    "name": "Mutex",
+    "short_name": "Mutex",
+    "description": "Mutex lets you control which tabs are audible and visible from your phone! It ensures you'll only hear audio from one tab at a time.",
+    "homepage_url": "http://chrome.google.com/webstore",
+    "manifest_version": 3,
+    "version": "0.0.4",
+    "minimum_chrome_version": "88",
+    "permissions": ["storage", "tabs", "gcm", "alarms"],
+    "optional_permissions": ["scripting"],
+    "icons": {
+        "128": "assets/img/128x128.png"
+    },
+    "background": {
+        "service_worker": "background.bundle.js"
+    },
+    "host_permissions": ["<all_urls>"],
+    "action": {
+        "default_icon": {
+            "16": "assets/img/16x16.png",
+            "24": "assets/img/24x24.png",
+            "32": "assets/img/32x32.png"
+        },
+        "default_title": "Mutex",
+        "default_popup": "popup.html"
+    }
+}

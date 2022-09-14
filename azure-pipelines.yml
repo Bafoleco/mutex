@@ -1,0 +1,77 @@
+# Based on http://evanlouie.github.io/posts/azure-pipelines-ci-cd-scripts-for-electron-forge
+
+trigger:
+  tags:
+    include:
+    - '*'
+  branches:
+    exclude:
+    - master
+
+# - stage: publish
+#   displayName: 'Build and Publish'
+#   jobs:
+#   - job: publish_ubuntu
+#     displayName: 'Publish Ubuntu'
+#     pool:
+#       vmImage: 'ubuntu-latest'
+#     steps:
+#       - task: NodeTool@0
+#         inputs:
+#           versionSpec: '16.x'
+#         displayName: 'Install Node.js'
+#       - task: Npm@1
+#         inputs:
+#           command: 'ci'
+#         displayName: 'Install Packages'
+#       - script: |
+#           npm run publish
+#         displayName: 'npm publish'
+#         env:
+#           GITHUB_TOKEN: $(GITHUB_TOKEN)
+#           NOTORIZE_APPLE_ID: $(NOTORIZE_APPLE_ID)
+#           NOTORIZE_APPLE_ID_PASSWORD: $(NOTORIZE_APPLE_ID_PASSWORD)
+#   - job: publish_mac
+#     displayName: 'Publish Mac'
+#     pool:
+#       vmImage: 'macOS-latest'
+#     steps:
+#       - task: InstallAppleCertificate@2
+#         inputs:
+#           certSecureFile: 'developer-id-application.p12'
+#           certPwd: $(DEVELOPER_ID_APPLICATION_PASSWORD)
+#       - task: NodeTool@0
+#         inputs:
+#           versionSpec: '16.x'
+#         displayName: 'Install Node.js'
+#       - task: Npm@1
+#         inputs:
+#           command: 'ci'
+#         displayName: 'Install Packages'
+#       - script: |
+#           npm run publish
+#         displayName: 'npm publish'
+#         env:
+#           GITHUB_TOKEN: $(GITHUB_TOKEN)
+#           NOTORIZE_APPLE_ID: $(NOTORIZE_APPLE_ID)
+#           NOTORIZE_APPLE_ID_PASSWORD: $(NOTORIZE_APPLE_ID_PASSWORD)
+#   - job: publish_windows
+#     displayName: 'Publish Windows'
+#     pool:
+#       vmImage: 'windows-latest'
+#     steps:
+#       - task: NodeTool@0
+#         inputs:
+#           versionSpec: '16.x'
+#         displayName: 'Install Node.js'
+#       - task: Npm@1
+#         inputs:
+#           command: 'ci'
+#         displayName: 'Install Packages'
+#       - script: |
+#           npm run publish
+#         displayName: 'npm publish'
+#         env:
+#           GITHUB_TOKEN: $(GITHUB_TOKEN)
+#           NOTORIZE_APPLE_ID: $(NOTORIZE_APPLE_ID)
+#           NOTORIZE_APPLE_ID_PASSWORD: $(NOTORIZE_APPLE_ID_PASSWORD)

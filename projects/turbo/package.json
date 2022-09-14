@@ -1,0 +1,66 @@
+{
+  "name": "mutex-turbo",
+  "productName": "mutex-turbo",
+  "version": "0.1.1",
+  "description": "My Electron application description",
+  "main": ".webpack/main",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint --ext .ts,.tsx ."
+  },
+  "keywords": [],
+  "author": {
+    "name": "Bay Foley-Cox",
+    "email": "bayfoleycox@gmail.com"
+  },
+  "repository": { 
+    "type": "git", 
+    "url": "https://github.com/bnb/metaverse.git" 
+  },
+  "license": "MIT",
+  "config": {
+    "forge": "./config/forge.config.js"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.65",
+    "@electron-forge/maker-deb": "^6.0.0-beta.65",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.65",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.65",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
+    "@electron-forge/maker-zip": "^6.0.0-beta.65",
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.65",
+    "@electron-forge/publisher-github": "^6.0.0-beta.65",
+    "@types/qrcode": "^1.5.0",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.3",
+    "css-loader": "^6.7.1",
+    "electron": "20.1.0",
+    "eslint": "^8.22.0",
+    "eslint-plugin-import": "^2.26.0",
+    "fork-ts-checker-webpack-plugin": "^7.2.13",
+    "node-loader": "^2.0.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.3.1",
+    "typescript": "~4.5.4"
+  },
+  "dependencies": {
+    "@nut-tree/nut-js": "^2.2.0",
+    "bootstrap": "^5.2.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.1.0",
+    "express": "^4.18.1",
+    "firebase": "^9.9.3",
+    "node-fetch": "^3.2.10",
+    "qrcode": "^1.5.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.5.0",
+    "react-dom": "^18.2.0",
+    "update-electron-app": "^2.0.1"
+  }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="popup.scss">
+    <script src="qrcode.min.js"></script>
+    <script type="module" src="popup.js"></script>
+  </head>
+  <body style="width: 320px; margin: 0;">
+    <nav class="navbar navbar-expand navbar-dark bg-dark justify-content-center">
+      <div class="container" style="margin: auto">
+        <span class="navbar-brand" style="margin: auto;"> 
+              Mutex Chrome
+        </span>
+        <img id="turbo-icon" style="width: 7%; margin-left: -11%; margin-right: 4%; display: none;" src = "../assets/img/turbo-icon.svg" alt="Turbo Enabled"/>
+      </div>
+    </nav>
+
+    <div class="vstack gap-2" style="padding: 0.5rem" id="main-stack">
+      <div  class="text-center" id="register-tab-container" style="visibility: hidden;">
+        <button type="button" class="btn" id="toggle" style="width: 100%;"> </button>
+      </div>
+
+      <button type="button" class="btn btn-outline-primary" id="show-pair-info" style="width: 100%;"> Show Pairing Info </button>
+
+      <div class="card" id="pair-info" style="width: 100%; display: none;">
+        <div class="card-body">
+          <div class="vstack gap-2">  
+            <button type="button" class="btn btn-outline-primary" id="copy-link-btn"> Copy Remote Link </button>
+            <div style="margin: auto;" id="qr-div"> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
