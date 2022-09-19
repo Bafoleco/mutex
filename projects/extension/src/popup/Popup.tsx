@@ -2,7 +2,7 @@ import React from 'react';
 import './Popup.scss';
 import { Col, Container, Nav, Navbar, Stack } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import { getLocal, setClipboard, registerTab, deregisterTab, setLocal } from "../shared/util";
+import { getLocal, setClipboard, registerTab, deregisterTab, setLocal, getLocalAsync } from "../shared/util";
 import { FULL_PERMISSIONS, ID, MUTEX_TURBO_URI, REGISTERED_TABS, REMOTE_URL, TURBO_STATE } from "../../../common/constants";
 import { turboTimerHandler, setTurboHasPermissions, setTurboIsRunning, setTurboIsInstalled } from '../background/turbo';
 import Pairing from './Pairing';
@@ -67,33 +67,37 @@ const handleTurboState = (turboState: TurboState) => {
   }
 }
 
-const checkTabRegistration = (setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
-  getLocal(REGISTERED_TABS, (oldRegisteredTabs) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (matches) => {
-      const currentTab = matches[0];
-      const windowId = currentTab.windowId;
-      const tabId = currentTab.id
+const checkTabRegistration = async (setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
 
-      console.log(currentTab);
-      console.log("current tab id: " + tabId);
+  const [matches, registeredTabs] = await Promise.all([
+    chrome.tabs.query({ active: true, currentWindow: true }),
+    getLocalAsync(REGISTERED_TABS)
+  ]);
 
-      if (tabId) {
-        if (windowId in oldRegisteredTabs && tabId in oldRegisteredTabs[windowId]) {
-          setTabRegistered(true);
-        } else {
-          setTabRegistered(false);
-        }
-      }
-    });
-  });
+  const currentTab = matches[0];
+  const windowId = currentTab.windowId;
+  const tabId = currentTab.id
+
+  console.log(currentTab);
+  console.log("current tab id: " + tabId);
+
+  if (tabId) {
+    if (windowId in registeredTabs && tabId in registeredTabs[windowId]) {
+      setTabRegistered(true);
+    } else {
+      setTabRegistered(false);
+    }
+  }
 }
 
-const deregisterTabHandler = (tab: chrome.tabs.Tab, setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
-  deregisterTab(tab, () => { setTabRegistered(false); });
+const deregisterTabHandler = async (tab: chrome.tabs.Tab, setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
+  await deregisterTab(tab);
+  setTabRegistered(false);
 }
 
-const registerTabHandler = (tab: chrome.tabs.Tab, setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
-  registerTab(tab, () => { setTabRegistered(true); });
+const registerTabHandler = async (tab: chrome.tabs.Tab, setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
+  await registerTab(tab);
+  setTabRegistered(true);
 }
 
 const getRegisterButton = (tab: chrome.tabs.Tab, tabRegistered: boolean, setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
@@ -109,7 +113,6 @@ const getRegisterButton = (tab: chrome.tabs.Tab, tabRegistered: boolean, setTabR
 }
 
 const Popup = () => {
-
   const [turboState, setTurboState] = React.useState<TurboState | undefined>(undefined);
   const [tabRegistered, setTabRegistered] = React.useState<boolean | undefined>(false);
   const [tab, setTab] = React.useState<chrome.tabs.Tab | undefined>(undefined);

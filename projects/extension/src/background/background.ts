@@ -50,13 +50,15 @@ chrome.storage.onChanged.addListener((changes) => {
   for (const storageKey in changes) {
     if (storageKey == AUDIBLE_TAB) {
       console.log("Storage Change: Audible Tab");
-      switchAudibleTab(changes[storageKey].newValue, changes[storageKey].oldValue);
+      // switchAudibleTab(changes[storageKey].newValue, changes[storageKey].oldValue);
     }
 
     if (storageKey == REGISTERED_TABS) {
       console.log("Storage Change: Registered Tabs");
       const numTabs = getNumTabs(changes[storageKey].newValue);
-      if (numTabs == 0) {
+      console.log(changes[storageKey].newValue);
+      // console.log("numTabs: " + numTabs);
+      if (numTabs === 0) {
         chrome.action.setBadgeText({ text: "" });
       } else {
         chrome.action.setBadgeText({ text: numTabs.toString() });

@@ -1,7 +1,10 @@
-import { ID, REQUEST_UPDATE, TURBO_UPDATE,
-        ACTIVE_TABS_UPDATE, VISIBLE_TABS, SERVER_URL, REGISTERED_TAB_UPDATE, REGISTERED_TABS, AUDIBLE_TAB, TURBO_STATE, PAUSE_UPDATE, WINDOW_FOCUS_UPDATE} from '../../../common/constants'
+import {
+  ID, REQUEST_UPDATE, TURBO_UPDATE,
+  ACTIVE_TABS_UPDATE, VISIBLE_TABS, SERVER_URL, REGISTERED_TAB_UPDATE, REGISTERED_TABS, AUDIBLE_TAB, TURBO_STATE, PAUSE_UPDATE, WINDOW_FOCUS_UPDATE
+} from '../../../common/constants'
 import { ActiveTabs, Message, RegisteredTabs, TurboStateUpdate, WindowFocusUpdate } from '../../../common/types';
-import {getLocal, mergeLocal, setLocal} from "../shared/util";
+import { getLocal, getLocalAsync, mergeLocal, setLocal } from "../shared/util";
+import { switchAudibleTab, switchVisibleTabs } from './active_tab_switching';
 
 
 type MessageData = {
@@ -31,16 +34,20 @@ chrome.gcm.onMessage.addListener((notification) => {
   }
 });
 
-const handleRequestUpdate = () => {
+const handleRequestUpdate = async () => {
   console.log("registered tabs update requested");
-  getLocal(REGISTERED_TABS, (registeredTabs) => {
-    send_registered_tab_update(registeredTabs)
-  });
+  const registeredTabs = await getLocalAsync(REGISTERED_TABS);
+  send_registered_tab_update(registeredTabs);
 }
 
-const handleActiveTabsUpdate = (activeTabs: ActiveTabs) => {
+const handleActiveTabsUpdate = async (activeTabs: ActiveTabs) => {
+  console.log("handleActiveTabsUpdate");
   const audibleTab = activeTabs.audibleTab;
   const visibleTabs = activeTabs.visibleTabs;
+
+  const [oldAudibleTab, oldVisibleTabs] = await Promise.all([getLocalAsync(AUDIBLE_TAB), getLocalAsync(VISIBLE_TABS)]);
+  await Promise.all([switchAudibleTab(audibleTab, oldAudibleTab), switchVisibleTabs(visibleTabs, oldVisibleTabs)]);
+
   setLocal(AUDIBLE_TAB, audibleTab);
   setLocal(VISIBLE_TABS, visibleTabs);
 }
@@ -53,12 +60,12 @@ const handleTurboUpdate = (turboUpdate: TurboStateUpdate) => {
 
 const handleWindowFocusUpdate = (windowFocusUpdate: WindowFocusUpdate) => {
   const windowToFocus = windowFocusUpdate.windowToFocus;
-  chrome.windows.update(windowToFocus, { focused: true});
+  chrome.windows.update(windowToFocus, { focused: true });
 }
 
 // const handlePauseUpdate = (pauseUpdate) => {
 //   console.log("pause update backend");
-  
+
 //   const tabId = pauseUpdate.tabId;
 //   const windowId = pauseUpdate.windowId;
 //   const pauseState = pauseUpdate.pauseState;
@@ -75,12 +82,12 @@ const handleWindowFocusUpdate = (windowFocusUpdate: WindowFocusUpdate) => {
 // }
 
 export const send_registered_tab_update = (registeredTabs: RegisteredTabs) => {
-  console.log('send registered tab update');
+  console.log('SEND REGISTERED TAB UPDATE');
   getLocal(ID, (id) => {
     const body = {
-      message: {id: id, type: REGISTERED_TAB_UPDATE, payload: registeredTabs}
+      message: { id: id, type: REGISTERED_TAB_UPDATE, payload: registeredTabs }
     };
-    
+
     console.log("post to: " + SERVER_URL + "/sendDataToRemote/" + id);
     fetch(SERVER_URL + "/sendDataToRemote/" + id, {
       method: 'POST',

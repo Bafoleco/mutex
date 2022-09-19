@@ -1,4 +1,6 @@
 import { VisibleTabs } from "../../../common/types";
+import { AUDIBLE_TAB } from "../shared/constants";
+import { getLocalAsync } from "../shared/util";
 import { storeFullscreenState, restoreFullscreenState } from "./fullscreen_handling";
 import { isTurboRunning } from "./turbo";
 
@@ -31,9 +33,23 @@ export const switchVisibleTabs = async (newVisibleTabs: VisibleTabs, oldVisibleT
   });
 };
 
-export const switchAudibleTab = (newAudibleTabId: number, oldAudibleTabId: number) => {
-  if (oldAudibleTabId) {
-    chrome.tabs.update(oldAudibleTabId, { muted: true });
+export const makeTabAudible = async (tabId: number) => {
+
+  const audibleTabId = await getLocalAsync(AUDIBLE_TAB);
+  if (audibleTabId) {
+    await chrome.tabs.update(audibleTabId, { muted: true });
   }
-  chrome.tabs.update(newAudibleTabId, { muted: false });
+  await chrome.tabs.update(tabId, { muted: false });
+
+};
+
+//is it a ridiculous micro optimization to not just refetch all tab info, on handlers?
+export const switchAudibleTab = async (newAudibleTabId: number | undefined, oldAudibleTabId: number | undefined) => {
+  if (newAudibleTabId) {
+    if (oldAudibleTabId) {
+      await Promise.all([chrome.tabs.update(newAudibleTabId, { muted: false }), chrome.tabs.update(oldAudibleTabId, { muted: true })]);
+    } else {
+      await chrome.tabs.update(newAudibleTabId, { muted: false });
+    }
+  }
 };

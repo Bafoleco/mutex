@@ -28,20 +28,20 @@ const displayId = (id: string, idDataUrl: string): JSX.Element => {
 const showPairingButton = (showId: boolean, setShowId: (showId: boolean) => void): JSX.Element => {
   if (showId) {
     return (
-      <Button variant="outline-primary" onClick={() => setShowId(false)}> Hide Pairing Info</Button>
+      <Button variant="outline-primary" onClick={() => setShowId(false)}> Close </Button>
     )
   } else {
-    return <Button variant="outline-primary" onClick={() => setShowId(true)}> Show Pairing Info</Button>;
+    return <Button variant="outline-primary" onClick={() => setShowId(true)}> Pair Phone </Button>;
   }
 }
-  
+
 
 type PairingProps = {
   id: string,
 }
 
 const Pairing = (props: PairingProps) => {
-  const {id} = props;
+  const { id } = props;
 
   const [showId, setShowId] = React.useState(false);
   const [idDataUrl, setIdDataUrl] = React.useState("");
@@ -54,8 +54,8 @@ const Pairing = (props: PairingProps) => {
 
   return (
     <Stack>
-      { showPairingButton(showId, setShowId) }
-      { showId && displayId(id, idDataUrl) }
+      {showPairingButton(showId, setShowId)}
+      {showId && displayId(id, idDataUrl)}
     </Stack>
   )
 }

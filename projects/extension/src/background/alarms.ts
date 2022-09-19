@@ -13,19 +13,19 @@ export const setupAlarms = () => {
   });
 
   chrome.storage.onChanged.addListener((changes) => {
-    console.log("Storage Change: Registered Tabs in Alarms");
+    // console.log("Storage Change: Registered Tabs in Alarms");
     for (const storageKey in changes) {
       if (storageKey == REGISTERED_TABS) {
         const newNumTabs = getNumTabs(changes[storageKey].newValue);
         const oldNumTabs = getNumTabs(changes[storageKey].oldValue);
-        console.log("oldNumTabs: " + oldNumTabs);
-        console.log("newNumTabs: " + newNumTabs);
+        // console.log("oldNumTabs: " + oldNumTabs);
+        // console.log("newNumTabs: " + newNumTabs);
         if (newNumTabs == 0 && oldNumTabs > 0) {
           console.log("No more registered tabs. Clearing Tab Screenshot Alarm.");
-          chrome.alarms.clear(TAB_SCREENSHOT_ALARM);
+          // chrome.alarms.clear(TAB_SCREENSHOT_ALARM);
         }
         if (oldNumTabs == 0 && newNumTabs > 0) {
-          console.log("Starting Tab Screenshot Alarm");
+          // console.log("Starting Tab Screenshot Alarm");
           chrome.alarms.create(TAB_SCREENSHOT_ALARM, { periodInMinutes: 1 });
         }
       }
