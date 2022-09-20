@@ -5,15 +5,19 @@ export type TabInfo = {
   status: string | undefined,
   url: string | undefined,
   pendingUrl: string | undefined,
-  active: boolean | undefined,
 }
 
 export type WindowState = {
   [key: string]: TabInfo;
 }
 
-export type RegisteredTabs = {
+export type TabState = {
   [key: string]: WindowState;
+}
+
+export type RegisteredTabs = {
+  tabState: TabState;
+  activeTabs: ActiveTabs;
 }
 
 export type VisibleTabs = {

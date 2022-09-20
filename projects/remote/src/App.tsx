@@ -21,26 +21,28 @@ function App() {
   console.log(deviceType);
 
   return (
-   <Col style={{height: "100%", width: '100%'}}>
-    <Navbar bg="dark" variant="dark">
-      <Container>
-        <Navbar.Brand>
-          Mutex Remote
-        </Navbar.Brand>
-      </Container>
-      <Nav>
-        <Nav.Link href="/info">Info</Nav.Link>
-        {
-          !isMobile && <Nav.Link href="/goturbo">Go Turbo</Nav.Link>
-        }
-      </Nav>
-    </Navbar>
-    <Routes>
-      <Route path="/remote/:id" element={<Remote />} />
-      <Route path="/info" element={<Info />} />
-      <Route path="/goturbo" element={<Downloads />} />
-    </Routes>
-   </Col>
+    <Col style={{ height: "100%", width: '100%' }}>
+      <Navbar bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand style={isMobile ? { margin: 'auto' } : {}}>
+            Mutex Remote
+          </Navbar.Brand>
+        </Container>
+        <Nav>
+          {
+            !isMobile && <Nav.Link href="/info">Info</Nav.Link>
+          }
+          {
+            !isMobile && <Nav.Link href="/goturbo">Go Turbo</Nav.Link>
+          }
+        </Nav>
+      </Navbar>
+      <Routes>
+        <Route path="/remote/:id" element={<Remote />} />
+        <Route path="/info" element={<Info />} />
+        <Route path="/goturbo" element={<Downloads />} />
+      </Routes>
+    </Col>
   );
 }
 

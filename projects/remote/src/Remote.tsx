@@ -4,9 +4,10 @@ import './messaging';
 import { useParams } from 'react-router-dom';
 
 import { onFirestoreUpdate } from './messaging';
+import { RegisteredTabs } from '../../common/types';
 
 const Remote = () => {
-  const [tabInfo, setTabInfo] = React.useState({});
+  const [registeredTabs, setRegisteredTabs] = React.useState<RegisteredTabs | undefined>(undefined);
   const { id } = useParams();
 
   React.useEffect(() => {
@@ -19,9 +20,9 @@ const Remote = () => {
           console.log('got tab state from firestore');
           console.log(tabState);
           console.log('setting tab state');
-          setTabInfo(tabState);
+          setRegisteredTabs(tabState);
         }
-      });  
+      });
     }
   }, [id]);
 
@@ -31,8 +32,10 @@ const Remote = () => {
     );
   }
 
-  return(
-    <TabDisplay id={id} registeredTabs={tabInfo}/>  
+  console.log(registeredTabs);
+
+  return (
+    registeredTabs ? <TabDisplay id={id} registeredTabs={registeredTabs} /> : <div> Loading... </div>
   );
 }
 

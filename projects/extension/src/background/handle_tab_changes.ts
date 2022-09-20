@@ -6,7 +6,7 @@ export const tabMoveTransformer = async (registeredTabs: RegisteredTabs, tabId: 
   const newRegisteredTabs = { ...registeredTabs };
 
   const newWindowInfo: WindowState = {};
-  const oldWindowInfo: WindowState = registeredTabs[windowId];
+  const oldWindowInfo: WindowState = registeredTabs.tabState[windowId];
 
   const tabsToUpdate = await Promise.all(Object.keys(oldWindowInfo).map((tabId) => { return chrome.tabs.get(parseInt(tabId)) }));
 
@@ -18,7 +18,7 @@ export const tabMoveTransformer = async (registeredTabs: RegisteredTabs, tabId: 
     }
   });
 
-  newRegisteredTabs[windowId] = newWindowInfo;
+  newRegisteredTabs.tabState[windowId] = newWindowInfo;
 
   return newRegisteredTabs;
 }
@@ -27,13 +27,13 @@ export const tabRemoveTransformer = async (registerTabs: RegisteredTabs, tabId: 
   const windowId = removeInfo.windowId;
 
   const newRegisteredTabs = { ...registerTabs };
-  const newWindowInfo = { ...registerTabs[windowId] };
+  const newWindowInfo: WindowState = { ...registerTabs.tabState[windowId] };
 
   delete newWindowInfo[tabId];
   if (Object.keys(newWindowInfo).length > 0) {
-    newRegisteredTabs[windowId] = newWindowInfo;
+    newRegisteredTabs.tabState[windowId] = newWindowInfo;
   } else {
-    delete newRegisteredTabs[windowId];
+    delete newRegisteredTabs.tabState[windowId];
   }
 
   console.log("saving to storage");
@@ -48,7 +48,7 @@ export const tabUpdateTransformer = (registerTabs: RegisteredTabs, tabId: number
   console.log(changeInfo);
 
   const windowId = tab.windowId;
-  if (windowId in registerTabs && tabId in registerTabs[windowId]) {
+  if (windowId in registerTabs.tabState && tabId in registerTabs.tabState[windowId]) {
 
     if (changeInfo.mutedInfo && changeInfo.mutedInfo.reason === 'extension') {
       console.log('muted by extension - doing nothing');
@@ -56,10 +56,10 @@ export const tabUpdateTransformer = (registerTabs: RegisteredTabs, tabId: number
     }
 
     const newRegisteredTabs = { ...registerTabs };
-    const newWindowInfo = { ...registerTabs[windowId] };
+    const newWindowInfo = { ...registerTabs.tabState[windowId] };
 
     newWindowInfo[tabId] = getTabInfo(tab);
-    newRegisteredTabs[windowId] = newWindowInfo;
+    newRegisteredTabs.tabState[windowId] = newWindowInfo;
 
     return newRegisteredTabs;
   }
@@ -70,47 +70,48 @@ export const tabAttachedTransformer = async (registeredTabs: RegisteredTabs, att
   const newWindowId = attachInfo.newWindowId;
 
   let wasFound = false;
-  Object.keys(registeredTabs).forEach((windowId) => {
-    Object.keys(registeredTabs[windowId]).forEach((tabId) => {
-      if (attachedTabId === parseInt(tabId)) {
-        delete registeredTabs[windowId][tabId]
-        if (Object.keys(registeredTabs[windowId]).length == 0) {
-          delete registeredTabs[windowId];
-        }
-        wasFound = true;
-      }
-    });
+  let oldWindowId = undefined;
+  Object.keys(registeredTabs.tabState).forEach((windowId) => {
+    const windowState = registeredTabs.tabState[windowId];
+    if (attachedTabId in windowState) {
+      wasFound = true;
+      oldWindowId = windowId;
+    }
   });
 
-  if (wasFound) {
-    const attachedTab = await chrome.tabs.get(attachedTabId);
-    const newRegisteredTabs = { ...registeredTabs };
-    if (!(newWindowId in newRegisteredTabs)) {
-      newRegisteredTabs[newWindowId] = {};
-    }
-    newRegisteredTabs[newWindowId][attachedTabId] = getTabInfo(attachedTab);
-    console.log('registered tabs after ATTACH');
-    console.log(newRegisteredTabs);
-    return newRegisteredTabs;
-  } else {
+  if (!wasFound || !oldWindowId) {
     return registeredTabs;
   }
+
+  // delete tab in old window. What tab is now visible?
+  delete registeredTabs.tabState[oldWindowId][attachedTabId];
+  if (Object.keys(registeredTabs.tabState[oldWindowId]).length == 0) {
+    delete registeredTabs.tabState[oldWindowId];
+    delete registeredTabs.activeTabs.visibleTabs[oldWindowId];
+  }
+
+  const attachedTab = await chrome.tabs.get(attachedTabId);
+  const newRegisteredTabs = { ...registeredTabs };
+  if (!(newWindowId in newRegisteredTabs.tabState)) {
+    newRegisteredTabs.tabState[newWindowId] = {};
+  }
+  newRegisteredTabs.tabState[newWindowId][attachedTabId] = getTabInfo(attachedTab);
+
+  // set visible status - assumption: if tab is just attached, it is visible
+  newRegisteredTabs.activeTabs.visibleTabs[newWindowId] = attachedTabId;
+
+  // console.log('registered tabs after ATTACH');
+  // console.log(newRegisteredTabs);
+  return newRegisteredTabs;
 };
 
 //RAW MODIFICATION OF REGISTERED TABS
 export const tabActivatedTransformer = async (registeredTabs: RegisteredTabs, activeInfo: chrome.tabs.TabActiveInfo) => {
   const windowId = activeInfo.windowId;
-  const windowTabs = registeredTabs[windowId];
+  const windowTabs = registeredTabs.tabState[windowId];
 
   if (windowTabs) {
-    for (const tabId in registeredTabs[windowId]) {
-      if (registeredTabs[windowId][tabId].active) {
-        registeredTabs[windowId][tabId].active = false;
-      }
-    }
-    if (activeInfo.tabId in registeredTabs[windowId]) {
-      registeredTabs[windowId][activeInfo.tabId].active = true;
-    }
+    registeredTabs.activeTabs.visibleTabs[windowId] = activeInfo.tabId;
   }
 
   return registeredTabs;

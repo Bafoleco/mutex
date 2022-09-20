@@ -4,7 +4,7 @@ import {
 } from '../../../common/constants'
 import { ActiveTabs, Message, RegisteredTabs, TurboStateUpdate, WindowFocusUpdate } from '../../../common/types';
 import { getLocal, getLocalAsync, mergeLocal, setLocal } from "../shared/util";
-import { switchAudibleTab, switchVisibleTabs } from './active_tab_switching';
+import { switchActiveTabs } from './active_tab_switching';
 
 
 type MessageData = {
@@ -45,11 +45,7 @@ const handleActiveTabsUpdate = async (activeTabs: ActiveTabs) => {
   const audibleTab = activeTabs.audibleTab;
   const visibleTabs = activeTabs.visibleTabs;
 
-  const [oldAudibleTab, oldVisibleTabs] = await Promise.all([getLocalAsync(AUDIBLE_TAB), getLocalAsync(VISIBLE_TABS)]);
-  await Promise.all([switchAudibleTab(audibleTab, oldAudibleTab), switchVisibleTabs(visibleTabs, oldVisibleTabs)]);
-
-  setLocal(AUDIBLE_TAB, audibleTab);
-  setLocal(VISIBLE_TABS, visibleTabs);
+  switchActiveTabs(audibleTab, visibleTabs);
 }
 
 const handleTurboUpdate = (turboUpdate: TurboStateUpdate) => {

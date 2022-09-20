@@ -3,8 +3,11 @@ import { RegisteredTabs, TabInfo } from '../../common/types';
 import { tabRemoveTransformer, tabMoveTransformer, tabAttachedTransformer, tabActivatedTransformer, tabUpdateTransformer } from '../src/background/handle_tab_changes';
 
 describe('tab change handler transformers', () => {
-  const tabInfo: TabInfo = { index: 1, title: 'test', url: 'test.com', icon: 'test.png', status: '', active: true, pendingUrl: '', muted: false };
-  const registeredTabs: RegisteredTabs = { "1": { "2": tabInfo, "3": tabInfo }, "4": { "5": tabInfo } };
+  const tabInfo: TabInfo = { index: 1, title: 'test', url: 'test.com', icon: 'test.png', status: '', pendingUrl: '' };
+  const registeredTabs: RegisteredTabs = {
+    tabState: { "1": { "2": tabInfo, "3": tabInfo }, "4": { "5": tabInfo } },
+    activeTabs: { visibleTabs: { "1": 2, "4": 5 }, audibleTab: 1 }
+  };
 
   test('test tabMoveTransformer', async () => {
 
@@ -53,10 +56,11 @@ describe('tab change handler transformers', () => {
   test('test tabActivatedTransformer normal', async () => {
     const nonActiveTab = { index: 1, title: 'test', url: 'test.com', icon: 'test.png', status: '', active: false, pendingUrl: '', muted: false };
     const activeTab = { index: 1, title: 'test', url: 'test.com', icon: 'test.png', status: '', active: true, pendingUrl: '' };
-    const registeredTabs: RegisteredTabs = { "1": { "2": nonActiveTab, "3": nonActiveTab }, "4": { "5": nonActiveTab } };
+    const registeredTabs: RegisteredTabs = {
+      tabState: { "1": { "2": nonActiveTab, "3": nonActiveTab }, "4": { "5": nonActiveTab } };
 
-    const postTransform = await tabActivatedTransformer(registeredTabs, { windowId: 1, tabId: 2 });
-    expect(postTransform).toEqual({ "1": { "2": activeTab, "3": nonActiveTab }, "4": { "5": nonActiveTab } });
-  });
+      const postTransform = await tabActivatedTransformer(registeredTabs, { windowId: 1, tabId: 2 });
+      expect(postTransform).toEqual({ "1": { "2": activeTab, "3": nonActiveTab }, "4": { "5": nonActiveTab } });
+    });
 
 });

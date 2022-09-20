@@ -18,61 +18,64 @@ type WindowDisplayProps = {
 
 export const WindowDisplay = (props: WindowDisplayProps) => {
 
-  const {windowId, windowTabs, visibleTab, audibleTab, 
-    index, getOnClickFunction, getOnPauseChange, sendWindowFocusUpdate} = props;
+  const { windowId, windowTabs, visibleTab, audibleTab,
+    index, getOnClickFunction, getOnPauseChange, sendWindowFocusUpdate } = props;
 
   const sortedTabs = Object.keys(windowTabs).sort((a, b) => {
     return windowTabs[a].index - windowTabs[b].index;
   });
 
-  console.log("visible tab: " + visibleTab);
-  console.log(typeof visibleTab);
-
-  return (
-    <Card>
-      <Card.Header>
-        Window {index + 1}
-
-        <Button onClick={() => sendWindowFocusUpdate(windowId)}> Focus Window </Button>
-      </Card.Header>
-      <Card.Body style={{backgroundColor: 'lightgray', padding: '0.25rem'}}>
-        <Stack direction="horizontal" style={{flexWrap: 'wrap'}}>
-            {
-              sortedTabs.map((tabId) => {
-                return(
-                    <Tab 
-                      active={visibleTab === parseInt(tabId)}
-                      key={tabId}
-                      tab={windowTabs[tabId]} 
-                      audible={parseInt(tabId) === audibleTab} 
-                      onClick={getOnClickFunction(windowId, parseInt(tabId))}
-                      onPauseChange={getOnPauseChange(windowId, parseInt(tabId))}
-                      pauseOnExit={false}
-                    />
-                );
-              })}
-        </Stack>
-      </Card.Body>
-    </Card>
-  );
+  // console.log("visible tab: " + visibleTab);
+  // console.log(typeof visibleTab);
 
   // return (
-  //   <Container fluid style={{padding: '0'}}>
-  //     <h5> Window {index + 1} </h5>
-  //     <Stack direction="horizontal" style={{flexWrap: 'wrap', backgroundColor: 'lightgray', borderRadius: '0.2rem', padding: '0.5rem'}}>
-  //       {
-  //         sortedTabs.map((tabId) => {
-  //           return(
-  //               <Tab 
+  //   <Card>
+  //     <Card.Header>
+  //       <Stack direction='horizontal'>
+  //         {`Window ${index + 1}`}
+  //         <Button variant='outline-secondary' style={{ display: 'block', marginRight: '1rem', marginLeft: 'auto' }} onClick={() => sendWindowFocusUpdate(windowId)}> Focus Window </Button>
+  //       </Stack>
+  //     </Card.Header>
+  //     <Card.Body style={{ backgroundColor: 'lightgray', padding: '0.25rem' }}>
+  //       <Stack direction="horizontal" style={{ flexWrap: 'wrap' }}>
+  //         {
+  //           sortedTabs.map((tabId) => {
+  //             return (
+  //               <Tab
   //                 active={visibleTab === parseInt(tabId)}
   //                 key={tabId}
-  //                 tab={windowTabs[tabId]} 
-  //                 audible={tabId === audibleTab} 
-  //                 onClick={getOnClickFunction(windowId, tabId)}
+  //                 tab={windowTabs[tabId]}
+  //                 audible={parseInt(tabId) === audibleTab}
+  //                 onClick={getOnClickFunction(windowId, parseInt(tabId))}
+  //                 onPauseChange={getOnPauseChange(windowId, parseInt(tabId))}
+  //                 pauseOnExit={false}
   //               />
-  //           );
-  //         })}
-  //     </Stack>
-  //   </Container>
+  //             );
+  //           })}
+  //       </Stack>
+  //     </Card.Body>
+  //   </Card>
   // );
+
+  return (
+    <Stack>
+      <Stack direction="horizontal" style={{ flexWrap: 'wrap' }}>
+        {
+          sortedTabs.map((tabId) => {
+            return (
+              <Tab
+                active={visibleTab === parseInt(tabId)}
+                key={tabId}
+                tab={windowTabs[tabId]}
+                audible={parseInt(tabId) === audibleTab}
+                onClick={getOnClickFunction(windowId, parseInt(tabId))}
+                onPauseChange={getOnPauseChange(windowId, parseInt(tabId))}
+                pauseOnExit={false}
+              />
+            );
+          })}
+      </Stack>
+      <hr style={{ marginTop: '0.25rem', marginBottom: '0.25rem', height: '2px', color: 'black' }} />
+    </Stack>
+  );
 }

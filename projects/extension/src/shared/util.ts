@@ -50,8 +50,6 @@ export const getTabInfo = (tab: chrome.tabs.Tab): TabInfo => {
     status: tab.status,
     url: tab.url,
     pendingUrl: tab.pendingUrl,
-    active: tab.active,
-    muted: tab.mutedInfo?.muted,
   }
 }
 
@@ -69,10 +67,14 @@ export const registerTabTransformer = (registeredTabs: RegisteredTabs, tab: chro
 
   if (tabId) {
     const newRegisteredTabs = { ...registeredTabs }
-    if (!(windowId in registeredTabs)) {
-      newRegisteredTabs[windowId] = {};
+    if (!(windowId in registeredTabs.tabState)) {
+      newRegisteredTabs.tabState[windowId] = {};
     }
-    newRegisteredTabs[windowId][tabId] = getTabInfo(tab);
+    newRegisteredTabs.tabState[windowId][tabId] = getTabInfo(tab);
+
+    switchAudibleTab(tabId, registeredTabs.activeTabs.audibleTab);
+    newRegisteredTabs.activeTabs.audibleTab = tabId;
+
     return newRegisteredTabs;
   } else {
     console.log("tabId is undefined, not registering tab");
@@ -83,18 +85,8 @@ export const registerTabTransformer = (registeredTabs: RegisteredTabs, tab: chro
 export const registerTab = async (tab: chrome.tabs.Tab) => {
   console.log("registering tab: " + tab.id);
 
-  const oldAudibleTab = await getLocalAsync(AUDIBLE_TAB);
-
-  console.log("old audible tab: " + oldAudibleTab);
-
-  await switchAudibleTab(tab.id, oldAudibleTab);
-
   await transformRegisteredTabs(async (registeredTabs) => {
     return registerTabTransformer(registeredTabs, tab);
-  });
-
-  setLocal(AUDIBLE_TAB, tab.id, () => {
-    console.log("set audible tab to: " + tab.id);
   });
 };
 
@@ -103,9 +95,13 @@ export const deregisterTabTransformer = (registeredTabs: RegisteredTabs, tab: ch
   if (tabId) {
     const windowId = tab.windowId;
     const newRegisteredTabs = { ...registeredTabs }
-    delete newRegisteredTabs[windowId][tabId];
-    if (Object.keys(newRegisteredTabs[windowId]).length === 0) {
-      delete newRegisteredTabs[windowId];
+    delete newRegisteredTabs.tabState[windowId][tabId];
+    if (Object.keys(newRegisteredTabs.tabState[windowId]).length === 0) {
+      delete newRegisteredTabs.tabState[windowId];
+    }
+
+    if (newRegisteredTabs.activeTabs.audibleTab === tabId) {
+      newRegisteredTabs.activeTabs.audibleTab = undefined;
     }
     return newRegisteredTabs;
   } else {
@@ -116,21 +112,15 @@ export const deregisterTabTransformer = (registeredTabs: RegisteredTabs, tab: ch
 
 export const deregisterTab = async (tab: chrome.tabs.Tab) => {
   console.log("deregistering tab: " + tab.id);
-  const tabId = tab.id;
   await transformRegisteredTabs(async (registeredTabs) => {
     return deregisterTabTransformer(registeredTabs, tab);
-  });
-
-  // TODO this is not correct, we should only reset audible tab if this tab was the audible tab
-  setLocal(AUDIBLE_TAB, undefined, () => {
-    console.log("set audible tab to: " + tabId);
   });
 };
 
 export const getNumTabs = (obj: RegisteredTabs) => {
   let count = 0;
-  for (const windowKey in obj) {
-    const window = obj[windowKey];
+  for (const windowKey in obj.tabState) {
+    const window = obj.tabState[windowKey];
     for (const tab in window) {
       count += 1;
     }
@@ -144,12 +134,12 @@ let registeredTabsLock = new AwaitLock();
 export const transformRegisteredTabs = async (transformer: (arg0: RegisteredTabs) => Promise<RegisteredTabs>) => {
   await registeredTabsLock.acquireAsync();
   try {
-    console.log("acquired lock");
+    // console.log("acquired lock");
     const registeredTabs = await getLocalAsync(REGISTERED_TABS);
     const newRegisteredTabs = await transformer(registeredTabs);
     await setLocalAsync(REGISTERED_TABS, newRegisteredTabs);
   } finally {
-    console.log("releasing lock");
+    // console.log("releasing lock");
     registeredTabsLock.release();
   }
 }

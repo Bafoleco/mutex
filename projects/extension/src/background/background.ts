@@ -8,6 +8,7 @@ import { getNumTabs, setLocal } from "../shared/util";
 import { switchAudibleTab, switchVisibleTabs } from "./active_tab_switching";
 import { setTurboHasPermissions } from "./turbo";
 import { setupAlarms } from "./alarms";
+import { RegisteredTabs } from "../../../common/types";
 
 declare global {
   interface Crypto {
@@ -18,14 +19,12 @@ declare global {
 //actions on chrome extension install
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Run setup activities.");
-  const id = self.crypto.randomUUID();
-
-  self.crypto.randomUUID();
+  // const id = self.crypto.randomUUID();
+  const id = 'bay-test';
 
   //initialize storage properly
-  setLocal(REGISTERED_TABS, {});
-  setLocal(VISIBLE_TABS, {});
-  setLocal(AUDIBLE_TAB, undefined);
+  const initialRegisteredTabs: RegisteredTabs = { tabState: {}, activeTabs: { audibleTab: undefined, visibleTabs: {} } };
+  setLocal(REGISTERED_TABS, initialRegisteredTabs);
   setLocal(ID, id);
   setLocal(TURBO_STATE, { hasPermissions: false, isRunning: false, isInstalled: false });
 
@@ -48,10 +47,10 @@ setupTabChangeHandlers();
 //listen to storage changes
 chrome.storage.onChanged.addListener((changes) => {
   for (const storageKey in changes) {
-    if (storageKey == AUDIBLE_TAB) {
-      console.log("Storage Change: Audible Tab");
-      // switchAudibleTab(changes[storageKey].newValue, changes[storageKey].oldValue);
-    }
+    // if (storageKey == AUDIBLE_TAB) {
+    //   console.log("Storage Change: Audible Tab");
+    //   // switchAudibleTab(changes[storageKey].newValue, changes[storageKey].oldValue);
+    // }
 
     if (storageKey == REGISTERED_TABS) {
       console.log("Storage Change: Registered Tabs");
@@ -66,10 +65,10 @@ chrome.storage.onChanged.addListener((changes) => {
       send_registered_tab_update(changes[storageKey].newValue);
     }
 
-    if (storageKey == VISIBLE_TABS) {
-      console.log("Storage Change: visible tabs change");
-      switchVisibleTabs(changes[storageKey].newValue, changes[storageKey].oldValue);
-    }
+    // if (storageKey == VISIBLE_TABS) {
+    //   console.log("Storage Change: visible tabs change");
+    //   switchVisibleTabs(changes[storageKey].newValue, changes[storageKey].oldValue);
+    // }
   }
 });
 
