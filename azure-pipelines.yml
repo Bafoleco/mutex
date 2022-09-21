@@ -9,6 +9,22 @@ trigger:
     - master
 
 stages:
+- stage: release
+  displayName: 'Create Release'
+  jobs:
+  - job:
+    displayName: 'Create Release'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: GitHubRelease@0
+      inputs:
+        gitHubConnection: 'mutex-release'
+        repositoryName: $(Build.Repository.Name)
+        action: 'create'
+        target: $(Build.SourceVersion)
+        tagSource: 'gitTag'
+        isDraft: 'true'
 - stage: publish
   displayName: 'Build and Publish'
   jobs:

@@ -108,6 +108,7 @@ const deregisterTabHandler = async (tab: chrome.tabs.Tab, setTabRegistered: Reac
 }
 
 const registerTabHandler = async (tab: chrome.tabs.Tab, setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
+  console.log("activating tab");
   await registerTab(tab);
   setTabRegistered(true);
 }
