@@ -1,9 +1,8 @@
-import { getId, setId } from './state';
+import { setId } from './state';
 import { setIsInstalledAndRunning } from './firebase';
 import path from 'path';
 import { BrowserWindow } from 'electron';
 
-//TODO main window edge case
 export const setupProtocol = (app: Electron.App, mainWindow: BrowserWindow) => {
   // setup protocol handler
   if (process.defaultApp) {
@@ -13,7 +12,7 @@ export const setupProtocol = (app: Electron.App, mainWindow: BrowserWindow) => {
   } else {
     app.setAsDefaultProtocolClient('mutex-turbo');
   }
-  
+
   //configure windows deep linking
   const gotTheLock = app.requestSingleInstanceLock();
   if (!gotTheLock) {
@@ -27,10 +26,12 @@ export const setupProtocol = (app: Electron.App, mainWindow: BrowserWindow) => {
       }
     })
   }
-  
+
+  // handle protocol
   app.on('open-url', (event, url) => {
     console.log('returned from url: ', url);
-    const id = url.split('mutex-turbo://')[1];
+    const id = url.split('mutex-turbo://open/id/')[1];
+    console.log('parsed id: ', id);
     setId(id);
     setIsInstalledAndRunning();
   });

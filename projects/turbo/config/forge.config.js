@@ -12,7 +12,7 @@ module.exports = {
         options: {
           maintainer: 'Bay Foley-Cox',
           homepage: 'https://mutex-remote.web.app/'
-        }    
+        }
       }
     },
     {
@@ -32,7 +32,7 @@ module.exports = {
         "repository": {
           "owner": "Bafoleco",
           "name": "mutex-turbo"
-        },      
+        },
       }
     }
   ],
