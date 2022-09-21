@@ -1,3 +1,6 @@
+console.log('Loading forge config');
+console.log('NOTORIZE_APPLE_ID', process.env.NOTORIZE_APPLE_ID);
+
 module.exports = {
   "makers": [
     {
