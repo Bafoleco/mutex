@@ -2,7 +2,7 @@
   "name": "mutex-turbo",
   "productName": "mutex-turbo",
   "version": "0.1.1",
-  "description": "My Electron application description",
+  "description": "Adds additional functionality to Mutex.",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
