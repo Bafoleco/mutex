@@ -18,7 +18,12 @@ app.use(cors());
 
 const updateTurboState = async (id: string, newState: TurboStateUpdate) => {
   try {
-    await db.collection("turboStates").doc(id).set(newState, {merge: true});
+    const newStateWithTimestamp = {
+      ...newState,
+      modified: admin.firestore.FieldValue.serverTimestamp(),
+    };
+    await db.collection("turboStates").doc(id)
+        .set(newStateWithTimestamp, {merge: true});
   } catch (error) {
     console.log("Error updating turbo state", error);
     console.error(error);
@@ -81,10 +86,12 @@ app.post("/sendDataToExtension/:id", async (req, res) => {
 // Update the tab state for a particular id
 app.post("/sendDataToRemote/:id", async (req, res) => {
   console.log("route: /sendDataToRemote/:id");
-
   try {
     await db.collection("tabStates").doc(req.params.id)
-        .set({tabState: JSON.stringify(req.body.message.payload)});
+        .set({
+          tabState: JSON.stringify(req.body.message.payload),
+          modified: admin.firestore.FieldValue.serverTimestamp(),
+        });
     res.sendStatus(200);
   } catch (error) {
     console.log("Error sending data to remote", error);

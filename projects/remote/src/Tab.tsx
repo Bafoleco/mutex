@@ -1,8 +1,7 @@
 import './App.css';
 import Card from 'react-bootstrap/Card';
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import Stack from 'react-bootstrap/esm/Stack';
-import Button from 'react-bootstrap/esm/Button';
 import { TabInfo } from '../../common/types';
 
 const getSize = (active: boolean) => {
@@ -22,44 +21,11 @@ const getHeaderStyle = (active: boolean) => {
   }
 }
 
-const setupButton = (pauseOnExit: boolean, onPauseChange: (arg0: boolean) => void) => {
-  // console.log("setup button");
-
-  const style = { display: 'block', width: '50%', margin: 'auto', height: '100%', fontSize: 'smaller' };
-
-  if (pauseOnExit) {
-    const onClick = (event: MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      console.log("clicked");
-      event.stopPropagation();
-      onPauseChange(!pauseOnExit);
-    }
-
-    return (
-      <Button variant="secondary" style={style} onClick={onClick}> Live </Button>
-    );
-  } else {
-
-    const onClick = (event: MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      console.log("clicked");
-      event.stopPropagation();
-      onPauseChange(!pauseOnExit);
-    }
-
-    return (
-      <Button variant="danger" style={style} onClick={onClick}> Live </Button>
-    );
-  }
-}
-
 type TabProps = {
   tab: TabInfo,
   active: boolean,
   audible: boolean,
   onClick: React.MouseEventHandler<HTMLElement>,
-  onPauseChange: (pauseOnExit: boolean) => void,
-  pauseOnExit: boolean,
 }
 
 const getBorder = (audible: boolean, active: boolean) => {
@@ -83,7 +49,7 @@ const getPadding = (active: boolean) => {
 
 const Tab = (props: TabProps) => {
 
-  const { tab, audible, onClick, active, pauseOnExit, onPauseChange } = props;
+  const { tab, audible, onClick, active } = props;
 
   const border = (audible) ? '' : '';
 
@@ -104,9 +70,6 @@ const Tab = (props: TabProps) => {
           <Card.Text className={'Card-Text'} style={{}}> {tab.title} </Card.Text>
           {/* {setupButton(pauseOnExit, onPauseChange)} */}
         </Card.Body>
-        <Card.Footer style={{ height: '3rem' }}>
-          {setupButton(pauseOnExit, onPauseChange)}
-        </Card.Footer>
       </Card>
     </div>
   );

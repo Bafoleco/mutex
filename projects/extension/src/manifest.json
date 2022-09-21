@@ -6,15 +6,24 @@
     "manifest_version": 3,
     "version": "0.0.4",
     "minimum_chrome_version": "88",
-    "permissions": ["storage", "tabs", "gcm", "alarms"],
-    "optional_permissions": ["scripting"],
+    "permissions": [
+        "storage",
+        "tabs",
+        "gcm",
+        "alarms"
+    ],
+    "optional_permissions": [
+        "scripting"
+    ],
     "icons": {
         "128": "assets/img/128x128.png"
     },
     "background": {
         "service_worker": "background.bundle.js"
     },
-    "host_permissions": ["<all_urls>"],
+    "host_permissions": [
+        "<all_urls>"
+    ],
     "action": {
         "default_icon": {
             "16": "assets/img/16x16.png",

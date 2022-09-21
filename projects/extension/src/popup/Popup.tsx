@@ -6,7 +6,7 @@ import { getLocal, setClipboard, registerTab, deregisterTab, setLocal, getLocalA
 import { FULL_PERMISSIONS, ID, MUTEX_TURBO_URI, REGISTERED_TABS, REMOTE_URL, TURBO_STATE } from "../../../common/constants";
 import { turboTimerHandler, setTurboHasPermissions, setTurboIsRunning, setTurboIsInstalled } from '../background/turbo';
 import Pairing from './Pairing';
-import { TurboState } from '../../../common/types';
+import { RegisteredTabs, TurboState } from '../../../common/types';
 import bootstrap from 'bootstrap'
 
 const chromeSetup = (setTurboState: React.Dispatch<React.SetStateAction<TurboState | undefined>>) => {
@@ -67,22 +67,30 @@ const handleTurboState = (turboState: TurboState) => {
   }
 }
 
-const checkTabRegistration = async (setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>) => {
+const checkTabRegistration = async (setTabRegistered: React.Dispatch<React.SetStateAction<boolean | undefined>>,
+  setTab: React.Dispatch<React.SetStateAction<chrome.tabs.Tab | undefined>>) => {
 
-  const [matches, registeredTabs] = await Promise.all([
+  const [matches, registeredTabsFromStorage] = await Promise.all([
     chrome.tabs.query({ active: true, currentWindow: true }),
     getLocalAsync(REGISTERED_TABS)
   ]);
 
+  const registeredTabs = registeredTabsFromStorage as RegisteredTabs;
+
   const currentTab = matches[0];
+  setTab(currentTab);
+
   const windowId = currentTab.windowId;
   const tabId = currentTab.id
 
+  console.log("INITIAL STATE");
   console.log(currentTab);
   console.log("current tab id: " + tabId);
+  console.log("current registerd tabs:")
+  console.log(registeredTabs);
 
   if (tabId) {
-    if (windowId in registeredTabs && tabId in registeredTabs[windowId]) {
+    if (windowId in registeredTabs.tabState && tabId in registeredTabs.tabState[windowId]) {
       setTabRegistered(true);
     } else {
       setTabRegistered(false);
@@ -113,6 +121,7 @@ const getRegisterButton = (tab: chrome.tabs.Tab, tabRegistered: boolean, setTabR
 }
 
 const Popup = () => {
+  console.log("RENDERING POPUP");
   const [turboState, setTurboState] = React.useState<TurboState | undefined>(undefined);
   const [tabRegistered, setTabRegistered] = React.useState<boolean | undefined>(false);
   const [tab, setTab] = React.useState<chrome.tabs.Tab | undefined>(undefined);
@@ -120,11 +129,7 @@ const Popup = () => {
 
   React.useEffect(() => {
     chromeSetup(setTurboState);
-    checkTabRegistration(setTabRegistered);
-    chrome.tabs.query({ active: true, currentWindow: true }, (matches) => {
-      const currentTab = matches[0];
-      setTab(currentTab);
-    });
+    checkTabRegistration(setTabRegistered, setTab);
     getLocal(ID, (id) => {
       setId(id);
     });
@@ -135,7 +140,7 @@ const Popup = () => {
       <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand style={{ margin: 'auto' }}>
-            Mutex Remote
+            Mutex Extension
           </Navbar.Brand>
         </Container>
         {turboState?.isRunning &&

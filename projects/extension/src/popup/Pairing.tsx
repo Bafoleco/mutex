@@ -18,7 +18,7 @@ const displayId = (id: string, idDataUrl: string): JSX.Element => {
       <Card.Body>
         <Stack gap={1}>
           <Button variant="outline-primary" onClick={() => setClipboard(`${REMOTE_URL}/remote/${id}`)}> Copy Remote Link </Button>
-          <img src={idDataUrl}></img>
+          <img style={{ width: "100%" }} src={idDataUrl}></img>
         </Stack>
       </Card.Body>
     </Card>

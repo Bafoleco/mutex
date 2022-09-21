@@ -1,8 +1,8 @@
 import React from 'react';
 import TabDisplay from './TabDisplay';
 import './messaging';
+import Spinner from 'react-bootstrap/Spinner'
 import { useParams } from 'react-router-dom';
-
 import { onFirestoreUpdate } from './messaging';
 import { RegisteredTabs } from '../../common/types';
 
@@ -28,14 +28,19 @@ const Remote = () => {
 
   if (!id) {
     return (
-      <div> No id </div>
+      <div> No Mutex ID could be parsed from this url. Did you use an exact pairing link from the extension? </div>
     );
   }
 
   console.log(registeredTabs);
 
   return (
-    registeredTabs ? <TabDisplay id={id} registeredTabs={registeredTabs} /> : <div> Loading... </div>
+    registeredTabs ? <TabDisplay id={id} registeredTabs={registeredTabs} /> :
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        <Spinner animation="border" variant="secondary" role="status" style={{ margin: 'auto', width: "10rem", height: "10rem" }}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
   );
 }
 
