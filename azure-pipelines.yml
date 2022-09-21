@@ -17,7 +17,7 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: GitHubRelease@0
+    - task: GitHubRelease@1
       inputs:
         gitHubConnection: 'mutex-release'
         repositoryName: $(Build.Repository.Name)
