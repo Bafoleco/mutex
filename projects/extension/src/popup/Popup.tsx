@@ -39,11 +39,11 @@ const handleTurboInstalled = () => {
   setTurboIsInstalled(true);
 }
 
-const openTurbo = () => {
-  chrome.tabs.create({ url: `${MUTEX_TURBO_URI}/open` });
+const openTurbo = (id: string) => {
+  chrome.tabs.create({ url: `${MUTEX_TURBO_URI}open/id/${id}` });
 }
 
-const handleTurboState = (turboState: TurboState) => {
+const handleTurboState = (turboState: TurboState, id: string | undefined) => {
   console.log("handle turbo state");
   console.log(turboState);
   if (!turboState.hasPermissions) {
@@ -61,9 +61,13 @@ const handleTurboState = (turboState: TurboState) => {
     )
   } else if (turboState.isInstalled && !turboState.isRunning) {
     console.log("has permissions and is installed but not running");
-    return (
-      <Button variant="outline-primary" onClick={() => openTurbo()}> Start Turbo </Button>
-    );
+    if (id) {
+      return (
+        <Button variant="outline-primary" onClick={() => openTurbo(id)}> Start Turbo </Button>
+      );
+    } else {
+      return <Button variant="outline-primary" disabled> Start Turbo </Button>
+    }
   }
 }
 
@@ -154,7 +158,7 @@ const Popup = () => {
           : <div style={{ height: 'var(--bs-btn-line-height)' }}> </div>
         }
         {id && <Pairing id={id} />}
-        {turboState && handleTurboState(turboState)}
+        {turboState && handleTurboState(turboState, id)}
       </Stack>
     </Col>
   );
