@@ -25,6 +25,7 @@ stages:
         target: $(Build.SourceVersion)
         tagSource: 'gitTag'
         isDraft: 'true'
+        addChangeLog: false
 - stage: publish
   displayName: 'Build and Publish'
   jobs:

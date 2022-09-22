@@ -13,14 +13,6 @@ const getSize = (active: boolean) => {
   }
 }
 
-const getHeaderStyle = (active: boolean) => {
-  if (active) {
-    return { backgroundColor: 'white' };
-  } else {
-    return {};
-  }
-}
-
 type TabProps = {
   tab: TabInfo,
   active: boolean,

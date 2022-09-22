@@ -19,7 +19,7 @@ const getButton = (os: UAParser.IOS, setDownloaded: React.Dispatch<React.SetStat
     }}> Download Mutex Turbo for Linux </Button>;
 
   } else if (osName === 'Mac OS') {
-    const link = "https://github.com/Bafoleco/mutex-turbo/releases/download/v0.1.0/mutex-turbo-0.1.0-x64.dmg";
+    const link = "https://github.com/Bafoleco/mutex/releases/latest/download/mutex-turbo.dmg";
     return <Button href={link} variant="primary" style={style} onClick={
       () => {
         setDownloaded(true);
@@ -27,7 +27,7 @@ const getButton = (os: UAParser.IOS, setDownloaded: React.Dispatch<React.SetStat
     }>  Download Mutex Turbo for Mac </Button>;
 
   } else if (osName === 'Windows') {
-    const link = "https://github.com/Bafoleco/mutex-turbo/releases/download/v0.1.0/mutex-turbo-0.1.0-x64.dmg";
+    const link = "https://github.com/Bafoleco/mutex/releases/latest/download/mutex-turbo.exe";
     return <Button href={link} variant="primary" style={style} onClick={
       () => {
         setDownloaded(true);
