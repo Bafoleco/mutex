@@ -34,7 +34,7 @@ module.exports = {
       "config": {
         "repository": {
           "owner": "Bafoleco",
-          "name": "mutex-turbo"
+          "name": "mutex"
         },
       }
     }
