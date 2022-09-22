@@ -1,12 +1,9 @@
-console.log('Loading forge config');
-console.log('NOTORIZE_APPLE_ID', process.env.NOTORIZE_APPLE_ID);
-
 module.exports = {
   "makers": [
     {
       "name": "@electron-forge/maker-squirrel",
       "config": {
-        "name": "mutex_turbo"
+        "name": "mutex-turbo"
       }
     },
     {
@@ -14,14 +11,16 @@ module.exports = {
       "config": {
         options: {
           maintainer: 'Bay Foley-Cox',
-          homepage: 'https://mutex-remote.web.app/'
+          homepage: 'https://mutex-remote.web.app/',
+          name: "mutex-turbo",
         }
       }
     },
     {
       "name": "@electron-forge/maker-dmg",
       "config": {
-        "format": "ULFO"
+        "format": "ULFO",
+        "name": "mutex-turbo"
       }
     },
     {

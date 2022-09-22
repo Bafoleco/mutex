@@ -88,11 +88,11 @@ stages:
       - task: Npm@1
         inputs:
           command: 'ci'
-          workingDir: 'projects/turbo'
+          workingDir: './projects/turbo'
         displayName: 'Install Packages'
       - script: |
           npm run publish
-        workingDirectory: '.\projects\turbo'
+        workingDirectory: './projects/turbo'
         displayName: 'npm publish'
         env:
           GITHUB_TOKEN: $(GITHUB_TOKEN)
