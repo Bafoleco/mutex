@@ -2,8 +2,9 @@ import { setId } from './state';
 import { setIsInstalledAndRunning } from './firebase';
 import path from 'path';
 import { BrowserWindow } from 'electron';
+import { GlobalState } from './types';
 
-export const setupProtocol = (app: Electron.App, mainWindow: BrowserWindow) => {
+export const setupProtocol = (app: Electron.App, globalState: GlobalState) => {
   // setup protocol handler
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
@@ -20,9 +21,9 @@ export const setupProtocol = (app: Electron.App, mainWindow: BrowserWindow) => {
   } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
       // Someone tried to run a second instance, we should focus our window.
-      if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore()
-        mainWindow.focus()
+      if (globalState.mainWindow) {
+        if (globalState.mainWindow.isMinimized()) globalState.mainWindow.restore()
+        globalState.mainWindow.focus()
       }
     })
   }
@@ -33,6 +34,5 @@ export const setupProtocol = (app: Electron.App, mainWindow: BrowserWindow) => {
     const id = url.split('mutex-turbo://open/id/')[1];
     console.log('parsed id: ', id);
     setId(id);
-    setIsInstalledAndRunning();
   });
 }

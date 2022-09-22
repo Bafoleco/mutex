@@ -28,17 +28,19 @@ export const getLocalAsync = async (key: string) => {
   return wrapped[key];
 }
 
-export const mergeLocal = (key: string, valueUpdate: any, callback?: () => void) => {
-  getLocal(key, (value) => {
+export const mergeLocal = (storageKey: string, valueUpdate: any, callback?: () => void) => {
+  console.log("merging local");
+  getLocal(storageKey, (value) => {
     const newValue = { ...value }
 
     console.log(value)
     console.log(valueUpdate)
     for (const key in valueUpdate) {
+      console.log("changing " + key + " to " + valueUpdate[key]);
       newValue[key] = valueUpdate[key];
     }
     console.log(newValue);
-    setLocal(key, newValue, callback);
+    setLocal(storageKey, newValue, callback);
   });
 }
 

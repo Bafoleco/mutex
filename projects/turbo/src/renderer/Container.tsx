@@ -18,7 +18,7 @@ root.render(
       <Navbar bg="dark" variant="dark" className='titlebar'>
         <Container>
           <Navbar.Brand style={{ userSelect: 'none' }} className={'mx-auto'}>
-            Mutex Turbo - v0.1.6
+            Mutex Turbo - v0.1.7
           </Navbar.Brand>
         </Container>
       </Navbar>

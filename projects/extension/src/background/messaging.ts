@@ -5,6 +5,7 @@ import {
 import { ActiveTabs, Message, RegisteredTabs, TurboStateUpdate, WindowFocusUpdate } from '../../../common/types';
 import { getLocal, getLocalAsync, mergeLocal, setLocal } from "../shared/util";
 import { switchActiveTabs } from './active_tab_switching';
+import { sendTurboHeartbeat } from './turbo';
 
 
 type MessageData = {
@@ -24,11 +25,8 @@ chrome.gcm.onMessage.addListener((notification) => {
     handleActiveTabsUpdate(message.payload);
   }
   if (message.type === TURBO_UPDATE) {
-    handleTurboUpdate(message.payload);
+    handleTurboUpdate(message.payload.stateUpdate);
   }
-  // if (message.type === PAUSE_UPDATE) {
-  //   handlePauseUpdate(message.payload);
-  // }
   if (message.type === WINDOW_FOCUS_UPDATE) {
     handleWindowFocusUpdate(message.payload);
   }
@@ -50,32 +48,15 @@ const handleActiveTabsUpdate = async (activeTabs: ActiveTabs) => {
 
 const handleTurboUpdate = (turboUpdate: TurboStateUpdate) => {
   console.log("turbo update backend");
+  console.log(turboUpdate);
   mergeLocal(TURBO_STATE, turboUpdate);
-  // sendTurboHeartbeat();
+  sendTurboHeartbeat();
 }
 
 const handleWindowFocusUpdate = (windowFocusUpdate: WindowFocusUpdate) => {
   const windowToFocus = windowFocusUpdate.windowToFocus;
   chrome.windows.update(windowToFocus, { focused: true });
 }
-
-// const handlePauseUpdate = (pauseUpdate) => {
-//   console.log("pause update backend");
-
-//   const tabId = pauseUpdate.tabId;
-//   const windowId = pauseUpdate.windowId;
-//   const pauseState = pauseUpdate.pauseState;
-
-//   getLocal(REGISTERED_TABS, (registeredTabs) => {
-//     if (windowId in registeredTabs) {
-//       if (tabId in registeredTabs[windowId]) {
-//         registeredTabs[windowId][tabId].pauseState = pauseState;
-//         return;
-//       }
-//     }
-//     console.log("desired tab/window is not registered and so its pause state cannot be updated");
-//   });
-// }
 
 export const send_registered_tab_update = (registeredTabs: RegisteredTabs) => {
   console.log('SEND REGISTERED TAB UPDATE');

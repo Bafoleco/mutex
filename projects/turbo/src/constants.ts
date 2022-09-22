@@ -4,3 +4,5 @@ export const REQ_ID_EVENT = "getId";
 export const SET_ID_EVENT = "setId";
 export const REC_ID_EVENT = "idChange";
 export const HEARTBEAT_EVENT = "heartbeat";
+
+export const ID_STORAGE_KEY = "id";

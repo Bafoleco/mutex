@@ -42,6 +42,9 @@ export const switchVisibleTabs = async (newVisibleTabs: VisibleTabs, oldVisibleT
 };
 
 export const switchAudibleTab = async (newAudibleTabId: number | undefined, oldAudibleTabId: number | undefined, triggeredByAction: boolean) => {
+  if (newAudibleTabId === oldAudibleTabId) {
+    return;
+  }
   if (newAudibleTabId) {
     const focusAudibleWindow = (!triggeredByAction) ? chrome.tabs.get(newAudibleTabId).then(async (tab) => {
       chrome.windows.update(tab.windowId, { focused: true });

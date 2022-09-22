@@ -1,4 +1,5 @@
 import { setIsRunning } from "./firebase";
+import { shutdownServer } from "./server";
 
 export const setupQuitHandling = (app: Electron.App) => {
 
@@ -18,6 +19,7 @@ export const setupQuitHandling = (app: Electron.App) => {
   app.on('before-quit', async (event) => {
     console.log("before-quit");
     if (!quitOnce) {
+      shutdownServer();
       event.preventDefault();
       await setIsRunning(false);
       quitOnce = true;
