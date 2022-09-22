@@ -3,7 +3,8 @@ module.exports = {
     {
       "name": "@electron-forge/maker-squirrel",
       "config": {
-        "name": "mutex-turbo"
+        "name": "mutex-turbo",
+        "setupExe": "mutex-turbo.exe",
       }
     },
     {
@@ -20,7 +21,8 @@ module.exports = {
       "name": "@electron-forge/maker-dmg",
       "config": {
         "format": "ULFO",
-        "name": "mutex-turbo"
+        "name": "mutex-turbo",
+        "exe": "mutex-turbo"
       }
     },
     {

@@ -5,7 +5,6 @@ import {
 import { setupTabChangeHandlers } from "./handle_tab_changes";
 import { send_registered_tab_update } from "./messaging";
 import { getNumTabs, setLocal } from "../shared/util";
-import { switchAudibleTab, switchVisibleTabs } from "./active_tab_switching";
 import { setTurboHasPermissions } from "./turbo";
 import { setupAlarms } from "./alarms";
 import { RegisteredTabs } from "../../../common/types";
@@ -47,11 +46,6 @@ setupTabChangeHandlers();
 //listen to storage changes
 chrome.storage.onChanged.addListener((changes) => {
   for (const storageKey in changes) {
-    // if (storageKey == AUDIBLE_TAB) {
-    //   console.log("Storage Change: Audible Tab");
-    //   // switchAudibleTab(changes[storageKey].newValue, changes[storageKey].oldValue);
-    // }
-
     if (storageKey == REGISTERED_TABS) {
       console.log("Storage Change: Registered Tabs");
       const numTabs = getNumTabs(changes[storageKey].newValue);
@@ -64,11 +58,6 @@ chrome.storage.onChanged.addListener((changes) => {
       }
       send_registered_tab_update(changes[storageKey].newValue);
     }
-
-    // if (storageKey == VISIBLE_TABS) {
-    //   console.log("Storage Change: visible tabs change");
-    //   switchVisibleTabs(changes[storageKey].newValue, changes[storageKey].oldValue);
-    // }
   }
 });
 

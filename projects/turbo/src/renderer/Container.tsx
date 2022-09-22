@@ -17,11 +17,11 @@ root.render(
     <Col>
       <Navbar bg="dark" variant="dark" className='titlebar'>
         <Container>
-          <Navbar.Brand style={{userSelect: 'none'}} className={'mx-auto'}>
-            Mutex Turbo
+          <Navbar.Brand style={{ userSelect: 'none' }} className={'mx-auto'}>
+            Mutex Turbo - v0.1.5
           </Navbar.Brand>
         </Container>
       </Navbar>
-      <App/>
+      <App />
     </Col>
   </React.StrictMode>);

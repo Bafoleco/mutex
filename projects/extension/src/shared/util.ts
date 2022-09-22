@@ -72,7 +72,7 @@ export const registerTabTransformer = (registeredTabs: RegisteredTabs, tab: chro
     }
     newRegisteredTabs.tabState[windowId][tabId] = getTabInfo(tab);
 
-    switchAudibleTab(tabId, registeredTabs.activeTabs.audibleTab);
+    switchAudibleTab(tabId, registeredTabs.activeTabs.audibleTab, true);
     newRegisteredTabs.activeTabs.audibleTab = tabId;
 
     return newRegisteredTabs;

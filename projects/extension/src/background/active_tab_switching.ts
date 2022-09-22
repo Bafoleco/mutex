@@ -5,7 +5,7 @@ import { isTurboRunning } from "./turbo";
 
 export const switchActiveTabs = async (audibleTab: number | undefined, visibleTabs: VisibleTabs) => {
   transformRegisteredTabs(async (registeredTabs) => {
-    await Promise.all([switchAudibleTab(audibleTab, registeredTabs.activeTabs.audibleTab), switchVisibleTabs(visibleTabs, registeredTabs.activeTabs.visibleTabs)]);
+    await Promise.all([switchAudibleTab(audibleTab, registeredTabs.activeTabs.audibleTab, false), switchVisibleTabs(visibleTabs, registeredTabs.activeTabs.visibleTabs)]);
     registeredTabs.activeTabs.audibleTab = audibleTab;
     registeredTabs.activeTabs.visibleTabs = visibleTabs;
     return registeredTabs;
@@ -41,11 +41,11 @@ export const switchVisibleTabs = async (newVisibleTabs: VisibleTabs, oldVisibleT
   });
 };
 
-export const switchAudibleTab = async (newAudibleTabId: number | undefined, oldAudibleTabId: number | undefined) => {
+export const switchAudibleTab = async (newAudibleTabId: number | undefined, oldAudibleTabId: number | undefined, triggeredByAction: boolean) => {
   if (newAudibleTabId) {
-    const focusAudibleWindow = chrome.tabs.get(newAudibleTabId).then((tab) => {
+    const focusAudibleWindow = (!triggeredByAction) ? chrome.tabs.get(newAudibleTabId).then(async (tab) => {
       chrome.windows.update(tab.windowId, { focused: true });
-    });
+    }) : Promise.resolve();
     if (oldAudibleTabId) {
       await Promise.all([chrome.tabs.update(newAudibleTabId, { muted: false }), chrome.tabs.update(oldAudibleTabId, { muted: true }), focusAudibleWindow]);
     } else {
