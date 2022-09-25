@@ -14,6 +14,7 @@ module.exports = {
           maintainer: 'Bay Foley-Cox',
           homepage: 'https://mutex-remote.web.app/',
           name: "mutex-turbo",
+
         }
       }
     },
@@ -56,6 +57,7 @@ module.exports = {
       "teamId": "3MS68ACDTM"
     },
     "name": "Mutex Turbo",
+    "executableName": "mutex-turbo",
     "icon": "./assets/icons/icon",
     "protocols": [
       {
