@@ -1,8 +1,6 @@
 import express from "express";
 import { keyboard } from "@nut-tree/nut-js";
-import { BrowserWindow } from "electron";
 import { setId } from "./state";
-import { setIsInstalledAndRunning } from "./firebase";
 import { GlobalState } from "./types";
 import * as http from 'http';
 

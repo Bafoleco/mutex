@@ -44,6 +44,11 @@ export const mergeLocal = (storageKey: string, valueUpdate: any, callback?: () =
   });
 }
 
+export const getTabInfoId = async (tabId: number) => {
+  const tab = await chrome.tabs.get(tabId);
+  return getTabInfo(tab);
+}
+
 export const getTabInfo = (tab: chrome.tabs.Tab): TabInfo => {
   return {
     index: tab.index,

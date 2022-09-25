@@ -1,8 +1,10 @@
 import React from 'react';
-import { Button, Card, Col, Stack } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+import Stack from 'react-bootstrap/Stack';
 import QRCode from 'qrcode';
 import { REMOTE_URL } from "../../../common/constants";
-
 
 const setClipboard = (text: string) => {
   var type = "text/plain";

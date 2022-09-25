@@ -1,7 +1,7 @@
 {
   "name": "mutex-turbo",
-  "productName": "mutex-turbo",
-  "version": "0.1.7",
+  "productName": "Mutex Turbo",
+  "version": "0.1.8",
   "description": "Adds additional functionality to Mutex.",
   "main": ".webpack/main",
   "scripts": {
@@ -49,7 +49,7 @@
     "typescript": "~4.5.4"
   },
   "dependencies": {
-    "@nut-tree/nut-js": "^2.2.0",
+    "@nut-tree/nut-js": "^2.3.0",
     "bootstrap": "^5.2.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",

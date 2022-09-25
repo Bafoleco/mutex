@@ -60,7 +60,8 @@ export const sendTurboHeartbeat = async () => {
       setTurboIsRunning(false);
     }
   } catch (e) {
-    console.error(e);
+    console.log("Mutex Turbo is not running.");
+    console.log(e);
     setTurboIsRunning(false);
   }
 }

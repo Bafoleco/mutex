@@ -1,8 +1,11 @@
 import React from 'react';
 import './Popup.scss';
-import { Col, Container, Nav, Navbar, Stack } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
-import { getLocal, setClipboard, registerTab, deregisterTab, setLocal, getLocalAsync } from "../shared/util";
+import { getLocal, registerTab, deregisterTab, getLocalAsync } from "../shared/util";
 import { FULL_PERMISSIONS, ID, MUTEX_TURBO_URI, REGISTERED_TABS, REMOTE_URL, TURBO_STATE } from "../../../common/constants";
 import { turboTimerHandler, setTurboHasPermissions, setTurboIsRunning, setTurboIsInstalled } from '../background/turbo';
 import Pairing from './Pairing';

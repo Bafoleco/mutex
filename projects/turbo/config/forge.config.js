@@ -55,7 +55,7 @@ module.exports = {
       "tool": "notarytool",
       "teamId": "3MS68ACDTM"
     },
-    "name": "mutex-turbo",
+    "name": "Mutex Turbo",
     "icon": "./assets/icons/icon",
     "protocols": [
       {
