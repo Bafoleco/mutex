@@ -44,12 +44,12 @@ const getButton = (os: UAParser.IOS, setDownloaded: React.Dispatch<React.SetStat
   }
 }
 
-const openMutexTurbo = () => {
-  const style = { margin: 'auto' };
-  const link = "mutex-turbo://open";
-  return <Button href={link} variant="primary" style={style} onClick={() => {
-  }}>Open Mutex Turbo</Button>;
-}
+// const openMutexTurbo = () => {
+//   const style = { margin: 'auto' };
+//   const link = "mutex-turbo://open";
+//   return <Button href={link} variant="primary" style={style} onClick={() => {
+//   }}>Open Mutex Turbo</Button>;
+// }
 
 const Downloads = () => {
   const uaParser = new UAParser(window.navigator.userAgent);
@@ -67,8 +67,7 @@ const Downloads = () => {
         </div>
         <h1 style={{ margin: 'auto' }}> Control your streams like never before</h1>
 
-        {!downloaded && getButton(uaParser.getOS(), setDownloaded)}
-        {downloaded && openMutexTurbo()}
+        {getButton(uaParser.getOS(), setDownloaded)}
       </Stack>
 
       <div style={{ height: "8rem" }}></div>
@@ -76,16 +75,17 @@ const Downloads = () => {
       <Row style={{ width: '80%', margin: 'auto' }}>
         <Col>
           <h3 style={{ textAlign: 'center' }}> Control Audio </h3>
+          <p className="text"> Coming soon! </p>
         </Col>
 
         <Col>
           <h3 style={{ textAlign: 'center' }}> Stay in Fullscreen Mode </h3>
           <p className="text"> Mutex Turbo allows you to swap tabs while remaining in fullscreen mode. Due to inherent limitations of the browser, no Chrome extension can offer this feature. </p>
-
         </Col>
 
         <Col>
-          <h3 style={{ textAlign: 'center' }}> Control Desktop Windows </h3>
+          <h3 style={{ textAlign: 'center' }}> Pair Your Phone </h3>
+          <p className="text"> Mutex Turbo provides another easy place to pair your phone! </p>
         </Col>
 
       </Row>

@@ -6,11 +6,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
 import { getLocal, registerTab, deregisterTab, getLocalAsync } from "../shared/util";
-import { FULL_PERMISSIONS, ID, MUTEX_TURBO_URI, REGISTERED_TABS, REMOTE_URL, TURBO_STATE } from "../../../common/constants";
-import { turboTimerHandler, setTurboHasPermissions, setTurboIsRunning, setTurboIsInstalled } from '../background/turbo';
+import { ID, MUTEX_TURBO_URI, REGISTERED_TABS, REMOTE_URL, TURBO_STATE } from "../../../common/constants";
+import { setTurboIsInstalled } from '../background/turbo';
 import Pairing from './Pairing';
 import { RegisteredTabs, TurboState } from '../../../common/types';
-import bootstrap from 'bootstrap'
+import { MUTEX_TURBO_PERMISSION_REQS } from '../shared/constants';
 
 const chromeSetup = (setTurboState: React.Dispatch<React.SetStateAction<TurboState | undefined>>) => {
   chrome.storage.onChanged.addListener((changes) => {
@@ -29,13 +29,8 @@ const chromeSetup = (setTurboState: React.Dispatch<React.SetStateAction<TurboSta
   });
 }
 
-const reqsForScriptInjection = {
-  origins: ["<all_urls>"],
-  permissions: ["scripting"]
-}
-
 const enableTurbo = () => {
-  chrome.permissions.request(reqsForScriptInjection);
+  chrome.permissions.request(MUTEX_TURBO_PERMISSION_REQS);
 }
 
 const handleTurboInstalled = () => {
@@ -90,11 +85,11 @@ const checkTabRegistration = async (setTabRegistered: React.Dispatch<React.SetSt
   const windowId = currentTab.windowId;
   const tabId = currentTab.id
 
-  console.log("INITIAL STATE");
-  console.log(currentTab);
-  console.log("current tab id: " + tabId);
-  console.log("current registerd tabs:")
-  console.log(registeredTabs);
+  // console.log("INITIAL STATE");
+  // console.log(currentTab);
+  // console.log("current tab id: " + tabId);
+  // console.log("current registerd tabs:")
+  // console.log(registeredTabs);
 
   if (tabId) {
     if (windowId in registeredTabs.tabState && tabId in registeredTabs.tabState[windowId]) {

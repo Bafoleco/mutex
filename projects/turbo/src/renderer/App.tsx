@@ -27,7 +27,7 @@ const displayHealth = (timeSinceMount: number, timeSinceHeartbeat: number): JSX.
   // console.log(timeSinceMount);
   // console.log(timeSinceHeartbeat);
 
-  const style: React.CSSProperties = {fontSize: '0.8em', margin: '0', textAlign: 'center'};
+  const style: React.CSSProperties = { fontSize: '0.8em', margin: '0', textAlign: 'center' };
 
   if (!timeSinceHeartbeat && timeSinceMount < 60.5) {
     return (
@@ -58,7 +58,7 @@ const displayId = (id: string, idDataUrl: string): JSX.Element => {
     <Card>
       <Card.Body>
         <Stack gap={1}>
-          <Button variant="outline-primary" onClick={() => setClipboard(`${REMOTE_URL}/${id}`)}> Copy Remote Link </Button>
+          <Button variant="outline-primary" onClick={() => setClipboard(`${REMOTE_URL}/remote/${id}`)}> Copy Remote Link </Button>
           <img src={idDataUrl}></img>
         </Stack>
       </Card.Body>
@@ -104,7 +104,7 @@ const App = (props: AppProps): JSX.Element => {
   const handleHeartbeat = (event: Event, message: any): void => {
     // console.log("received heartbeat");
     setTimeSinceHeartbeat(0);
-    QRCode.toDataURL(`${REMOTE_URL}/${message.id}`, (err: Error, url: string) => {
+    QRCode.toDataURL(`${REMOTE_URL}/remote/${message.id}`, (err: Error, url: string) => {
       setId(message.id);
       setIdDataUrl(url);
     });
@@ -125,7 +125,7 @@ const App = (props: AppProps): JSX.Element => {
   return (
     <Container fluid>
       <p></p>
-      <Stack style={{width: '90%', margin: 'auto'}} gap={1}>
+      <Stack style={{ width: '90%', margin: 'auto' }} gap={1}>
         <h5>
           {displayHealth(timeSinceMount, timeSinceHeartbeat)}
         </h5>

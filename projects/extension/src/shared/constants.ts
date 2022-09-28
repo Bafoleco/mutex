@@ -1,5 +1,5 @@
 //storage constants
-export const REGISTERED_TABS: string = "registeredTabs"; 
+export const REGISTERED_TABS: string = "registeredTabs";
 export const AUDIBLE_TAB: string = "audibleTab";
 export const VISIBLE_TABS: string = "visibleTabs";
 export const FULLSCREEN_INFO: string = "fullscreen-info/";
@@ -30,5 +30,4 @@ export const MUTEX_TURBO_PERMISSION_REQS = {
 export const MUTEX_TURBO_PING_ALARM: string = "mutex-turbo-ping";
 export const TAB_SCREENSHOT_ALARM: string = "tab-screenshot";
 
-//RGB = (3,4,7)
 export const FULLSCREEN_BUTTON_COLOR: string = "#030407";

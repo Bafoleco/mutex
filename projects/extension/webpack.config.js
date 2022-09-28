@@ -62,6 +62,19 @@ var options = {
             loader: 'css-loader',
           },
           {
+            loader: 'postcss-loader', // Run post css actions
+            options: {
+              postcssOptions: {
+                plugins: function () { // post css plugins, can be exported to postcss.config.js
+                  return [
+                    require('precss'),
+                    require('autoprefixer')
+                  ];
+                }
+              }
+            }
+          },
+          {
             loader: 'sass-loader',
             options: {
               sourceMap: true,

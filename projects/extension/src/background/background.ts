@@ -1,5 +1,5 @@
 import {
-  REGISTERED_TABS, AUDIBLE_TAB, VISIBLE_TABS, SERVER_URL,
+  REGISTERED_TABS, SERVER_URL,
   CLOUD_MESSAGING_SENDER_ID, MUTEX_TURBO_PERMISSION_REQS, ID, TURBO_STATE
 } from "../../../common/constants";
 import { setupTabChangeHandlers } from "./handle_tab_changes";
@@ -18,8 +18,7 @@ declare global {
 //actions on chrome extension install
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Run setup activities.");
-  // const id = self.crypto.randomUUID();
-  const id = 'bay-test';
+  const id = self.crypto.randomUUID();
 
   //initialize storage properly
   const initialRegisteredTabs: RegisteredTabs = { tabState: {}, activeTabs: { audibleTab: undefined, visibleTabs: {} } };
@@ -38,6 +37,9 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.permissions.contains(MUTEX_TURBO_PERMISSION_REQS, (hasPermissions) => {
     setTurboHasPermissions(hasPermissions);
   });
+
+  // Setup Alarms
+  setupAlarms();
 });
 
 //setup tab change handlers
@@ -74,6 +76,3 @@ chrome.permissions.onAdded.addListener(() => {
     setTurboHasPermissions(hasPermissions);
   });
 });
-
-// Setup Alarms
-setupAlarms();

@@ -4,7 +4,7 @@
     "description": "Mutex lets you control which tabs are audible and visible from your phone! It ensures you'll only hear audio from one tab at a time.",
     "homepage_url": "http://chrome.google.com/webstore",
     "manifest_version": 3,
-    "version": "0.0.4",
+    "version": "0.1.1",
     "minimum_chrome_version": "88",
     "permissions": [
         "storage",
